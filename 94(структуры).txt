@@ -1,0 +1,84 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <stdio.h>
+using namespace std;
+/*пусть в файле фамилий ffam находятся фамилии студентов,в файле оценок fnote в том же порядке оценки студентов
+в файле fchg - изменения оценок (номер студента номер изменённой оценки, новая оценка). Записи упорядочены по номеру студента.
+распечатать фамилии студентов, получающих степендию (сдали на хорошо и отлично)*/
+
+struct student
+{
+	string name;
+	int note[4];
+};
+void inp(int n, int i,struct student *I)
+{
+	cout << I->name << ' ';
+	for (i = 0; i < n; i++)
+		cout << I->note[i] << ' ';
+}
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	ifstream ffam, fnote, fchg;
+	int n = 4, i, oc, s, no, o, count = 0, k = 0, nomer = 1;;
+	vector <string> stependiat;
+	string name;
+	ffam.open("D:\\ПММ_Лабы_2сем\\ffam.txt");
+	if (ffam.is_open())
+		cout << "файл открыт" << endl;
+	else cout << "файл не открыт" << endl;
+	fnote.open("D:\\ПММ_Лабы_2сем\\fnote.txt");
+	if (fnote.is_open())
+		cout << "файл открыт" << endl;
+	else cout << "файл не открыт" << endl;
+	fchg.open("D:\\ПММ_Лабы_2сем\\fchg.txt");
+	if (fchg.is_open())
+		cout << "файл открыт" << endl;
+	else cout << "файл не открыт" << endl;
+	student Ivanov;
+	while (!ffam.eof() & !fnote.eof()) {
+		ffam >> name;
+		Ivanov.name = name;
+		for (i = 0; i < n; i++)
+		{
+			fnote >> oc;
+			Ivanov.note[i] = oc;
+		}
+		inp(n, i, &Ivanov);
+		cout << "  ";
+		while (!fchg.eof())
+		{
+			fchg >> s;
+			fchg >> no;
+			fchg >> o;
+			if (nomer == s)
+				Ivanov.note[no - 1] = o;
+		}
+		fchg.seekg(0);
+		nomer++;
+		inp(n, i, &Ivanov);
+		cout << endl;;
+		for (int j = 0; j < n; j++)
+			if (Ivanov.note[j] > 3)
+				count++;
+		if (count == 4)
+		{
+			stependiat.push_back(Ivanov.name);
+			k = 1;
+		}
+	}
+	cout << endl << "степендиаты" << endl;
+	if (k == 0)
+		cout << "степендиатов нет";
+	else 
+		for (i = 0; i < stependiat.size(); i++)
+			cout << stependiat[i] << endl;
+	ffam.close();
+	fnote.close();
+	fchg.close();
+	return 0;
+}

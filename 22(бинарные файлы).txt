@@ -1,0 +1,78 @@
+#include <windows.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#pragma warning(disable : 4996)
+using namespace std;
+/*Создайте файл Каталог файлов.Занесите в отдельный файл записи о файлых с заданным именем*/
+
+struct file
+{
+	char name[8];
+	char spec[4];
+	char date[7];
+	char block[5];
+};
+void Write_file(file* files, int N, FILE* bin_file)
+{
+
+	for (int i = 0; i < N; ++i)
+	{
+		fwrite(&files[i], sizeof(files[0]), N, bin_file);
+	}
+}
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	const int N = 4;
+	char name[8];
+	FILE* bin_file;
+	FILE* new_bin_file;
+	bin_file = fopen("D:\\ПММ_Лабы_2сем\\bin_file.bin", "wb+");
+	if (!bin_file)
+		cout << "файл не открыт" << endl;
+	else cout << "файл открыт" << endl;
+	new_bin_file = fopen("D:\\ПММ_Лабы_2сем\\new_bin_file.bin", "wb+");
+	if (!new_bin_file)
+		cout << "файл не открыт" << endl;
+	else cout << "файл открыт" << endl;
+	file files[N] = { {"File", "doc", "020222", "3204"},
+		 {"Doclad", "txt", "051223", "3403"},
+		 {"File", "pdf", "010101", "3403"},
+		 {"History", "ppt", "020423", "3403"}};
+	Write_file(files, N, bin_file);
+	fclose(bin_file);
+	bin_file = fopen("D:\\ПММ_Лабы_2сем\\bin_file.bin", "rb+");
+	if (!bin_file)
+		cout << "файл не открыт" << endl;
+	else cout << "файл открыт" << endl;
+	file Files[N];
+	fread(&Files, sizeof(files[0]), N, bin_file);
+	cout << "файл" << endl;
+	for (int i = 0; i < N; i++)
+		cout << Files[i].name << " " << Files[i].spec << " " << Files[i].date << " " << Files[i].block << endl;
+	cout << "Введите название файла ";
+	cin >> name;
+	int n = 0;
+	file FILES[N];
+	for (int i = 0; i < N; i++)
+	{
+		if (strcmp(name, files[i].name) == 0)
+		{
+			FILES[n] = files[i];
+			n++;
+		}
+	}
+	if (n)
+	{
+		cout << "новый файл" << endl;
+		for (int i = 0; i < n; i++)
+			cout << FILES[i].name << " " << FILES[i].spec << " " << FILES[i].date << " " << FILES[i].block << endl;
+	}
+	else
+		cout << "такого файла нет";
+	Write_file(FILES, n, new_bin_file);
+	fclose(bin_file);
+	fclose(new_bin_file);
+	return 0;
+}

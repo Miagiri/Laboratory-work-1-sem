@@ -1,0 +1,74 @@
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <cmath>
+//Вычислите определитель заданной матрицы, пользуясь формулой разложения по первой строке
+using namespace std;
+
+void B_mas(int** A, int n, int row, int col, int** newA)
+{
+	int smRow = 0;  //смещения
+	int smCol = 0; 
+	for (int i = 0; i < n - 1; i++) {
+		if (i == row) {
+			smRow = 1;
+		}
+		smCol = 0;  
+		for (int j = 0; j < n - 1; j++) {	 
+			if (j == col) {
+				smCol = 1;  
+			}
+			newA[i][j] = A[i + smRow][j + smCol];
+		}
+	}
+}
+
+int det_A(int** A, int n)
+{
+	int j = 0, det = 0, mnog=1;
+	if (n == 1)
+		return A[0][0];
+	if (n == 2)
+		return (A[0][0] * A[1][1] - A[0][1] * A[1][0]);
+	else
+	{
+		int** newA = new int*[n - 1];
+		for (j = 0; j < n-1; j++)
+			newA[j] = new int[n-1];
+		for (j = 0; j < n; j++)
+		{
+			B_mas(A, n, 0, j, newA);
+			det = det + (mnog * A[0][j] * det_A(newA, n - 1));
+			mnog = -1 * mnog;
+		}
+		for (int i = 0; i < n - 1; i++) {
+			delete[]newA[i];
+		}
+		delete[]newA;
+	}
+	return det;
+}
+
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int n, i, j;;
+	cout << "введите размер массива ";
+	cin >> n;
+	int** A = new int* [n];
+	for (i = 0; i < n; i++)
+		A[i] = new int[n];
+	for (i = 0; i < n; i++)
+		for (j = 0; j < n; j++)
+			A[i][j] = rand()%6;
+	printf("\n Массив A \n");
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+			cout << A[i][j] << " ";
+		cout << endl;
+	}
+	cout << "определитель матрицы А равен " << det_A(A, n);
+	return 0;
+}

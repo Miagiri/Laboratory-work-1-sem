@@ -1,0 +1,181 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+/*Создать линейный односвязный список. Из списка удалить элементы, стоящие между первым и вторым нулевым элементами,
+а затем вставить число, равное последнему элементу списка, перед первым отрицательным и после него. Освободить память, занимаемую элементами списка*/
+
+struct node {
+    int inf;
+    node* next;
+};
+
+
+struct list {
+    node* head = nullptr;
+
+    list(int n) {
+        head = new node;
+        head->inf = n;
+        head->next = nullptr;
+    }
+
+    void clear() {
+        if (head != NULL) {
+            node* ptr1 = head, * ptr2 = head->next;
+            while (ptr2) {
+                ptr1 = ptr2;
+                ptr2 = ptr2->next;
+                delete ptr1;
+            }
+            delete head;
+            head = nullptr;
+        }
+        else {
+            delete head;
+            cout << "список очищен" << endl;
+        }
+    }
+
+    ~list() {
+        (*this).clear();
+    }
+
+    void add(int n) {
+        node* ptr = head;
+        if (ptr) {
+            while (ptr->next)
+                ptr = ptr->next;
+            ptr->next = new node;
+            ptr->next->inf = n;
+            ptr->next->next = nullptr;
+        }
+        else {
+            head->inf = n;
+            head->next = nullptr;
+        }
+    }
+
+    void print() {
+        node* ptr = head;
+        if (ptr) {
+            while (ptr) {
+                cout << ptr->inf << ' ';
+                ptr = ptr->next;
+            }
+            cout << '\n';
+        }
+        else cout << "No elements\n";
+    }
+
+    void AddBefore(int find, int num)
+    {
+        node* current = search(find);
+        if (current != 0)
+        {
+            node* t = new (node);
+            t->next = current->next;
+            t->inf = num;
+            current->next = t;
+        }
+    }
+    void AddAfter(int find, int num)
+    {
+        node* current = search(find);
+        if (current != 0)
+        {
+            node* t = new (node);
+            t->next = current->next;
+            t->inf = current->inf;
+            current->next = t;
+            current->inf = num;
+        }
+    }
+    node* search(int element)
+    {
+        node* p = head;
+        node* t = head->next;
+        while (t != NULL && p->inf != element)
+        {
+            p = t;
+            t = t->next;
+        }
+        return p;
+    }
+    node* search_nul_sek(node* nul)
+    {
+        node* t = nul->next;
+        while (t != NULL && t->inf != 0)
+        {
+            nul = t;
+            t = t->next;
+        }
+        return t;
+    }
+    void delite_el(node* nul, int el)
+    {
+        node* t = nul->next;
+        if (t != NULL)
+        {
+            nul->next = nul->next->next;
+            delete t;
+        }
+    }
+    int count(node* nul, node* nul2)
+    {
+        int c = 0;
+        node* t = nul->next;
+        while (t != nul2) {
+            c++;
+            nul = t;
+            t = t->next;
+        }
+        return c;
+    }
+    int otrel()
+    {
+        node* p = head;
+        node* t = head->next;
+        while (t != NULL && t->inf >= 0)
+        {
+            p = t;
+            t = t->next;
+        }
+        if (t == NULL) {
+            cout << "нет отрицательных чисел" << endl;
+            return 0;
+        }
+        else
+            return t->inf;
+    }
+
+};
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    int n, kol;
+    cout << "введите колличество элементов ";
+    cin >> kol;
+    cout << "введите элементы" << endl;
+    cin >> n;
+    list lst(n);
+    for (int i = 0; i < kol - 1; i++)
+    {
+        cin >> n;
+        lst.add(n);
+    }
+    lst.print();
+    node* nul = lst.search(0);
+    node* nul2 = lst.search_nul_sek(nul);
+    int c = lst.count(nul, nul2);
+    for (int i = 0; i < c; i++)
+        lst.delite_el(nul, 0);
+    lst.print();
+    int otr_ch = lst.otrel();
+    cout << otr_ch << endl;
+    lst.AddAfter(otr_ch, n);
+    lst.AddBefore(otr_ch, n);
+    lst.print();
+    lst.clear();
+    return 0;
+}

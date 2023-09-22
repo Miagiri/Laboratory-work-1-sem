@@ -1,0 +1,142 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+template <typename T>
+T minimum(T a, T b)
+{
+	if (a < b) return a;
+	else return b;
+}
+
+template <typename T>
+T maximum(T a, T b)
+{
+	if (a > b) return a;
+	else return b;
+}
+
+template <typename T>
+T summa(T a, T b)
+{
+	return a + b;
+}
+
+template <typename T>
+T difference(T a, T b)
+{
+	return a - b;
+}
+
+template <typename T>
+T multiplication(T a, T b)
+{
+	return a * b;
+}
+
+template <typename T>
+float division(T a, T b)
+{
+	if (b == 0) 
+		cout << "ошибка, на ноль делить нельзя";
+	else return a / b;
+}
+
+template <typename T>
+T degree(T a, T b)
+{
+	int d = 1;
+	for (int i = 0; i < b; i++)
+		d = d * a;
+	return d;
+}
+
+template <typename T>
+float percent(T a, T b)
+{
+	if (a <= 0) 
+		cout << "ошибка, первое число не может быть равно нулю";
+
+	else return (b * 100) / a;
+}
+
+template <typename T>
+float fraction(T a, T b)
+{
+	return (a * b) / 100;
+}
+
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int c;
+	float x, y;
+	cout << "выберете желаемую операцию и введите её цифру" << endl;
+	cout << "1 - минимум из 2-х чисел" << endl;
+	cout << "2 - максимум из 2-х чисел" << endl;
+	cout << "3 - сумма 2-х чисел" << endl;
+	cout << "3 - разность 2-х чисел" << endl;
+	cout << "5 - умножение 2-х чисел" << endl;
+	cout << "6 - деление 2-х чисел" << endl;
+	cout << "7 - возведение числа в степень" << endl;
+	cout << "8 - процент числа" << endl;
+	cout << "9 - доля числа" << endl;
+	cin >> c;
+	if (c == 1)
+	{
+		cout << "введите двa числа" << endl;
+		cin >> x >> y;
+		cout << minimum(x, y);
+	}
+	if (c == 2)
+	{
+		cout << "введите двa числа" << endl;
+		cin >> x >> y;
+		cout << maximum(x, y);
+	}
+	if (c == 3)
+	{
+		cout << "введите двa числа" << endl;
+		cin >> x >> y;
+		cout << summa(x, y);
+	}
+	if (c == 4)
+	{
+		cout << "введите двa числа" << endl;
+		cin >> x >> y;
+		cout << difference(x, y);
+	}
+	if (c == 5)
+	{
+		cout << "введите двa числа" << endl;
+		cin >> x >> y;
+		cout << multiplication(x, y);
+	}
+	if (c == 6)
+	{
+		cout << "введите двa числа" << endl;
+		cin >> x >> y;
+		cout << division(x, y);
+	}
+	if (c == 7)
+	{
+		cout << "введите число и степень в которую его нужно возвести" << endl;
+		cin >> x >> y;
+		cout << degree(x, y);
+	}
+	if (c == 8)
+	{
+		cout << "введите два числа, основное и число процент содержание которого нужно найти" << endl;
+		cin >> x >> y;
+		cout << percent(x, y)<<"%";
+	}
+	if (c == 9)
+	{
+		cout << "введите число и процент который от него нужно найти" << endl;
+		cin >> x, y;
+		cout << fraction(x, y);
+	}
+
+	return 0;
+}

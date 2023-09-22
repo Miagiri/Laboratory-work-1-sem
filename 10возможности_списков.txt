@@ -1,0 +1,466 @@
+#include <iostream>;
+using namespace std;
+
+struct node {
+    int inf;
+    node* next;
+};
+
+struct list {
+    node* head = nullptr;
+    node* end;
+
+    list(int n) {
+        head = new node;
+        head->inf = n;
+        head->next = nullptr;
+    }
+    //очистка списка
+    void clear() {
+        if (head != NULL) {
+            node* ptr1 = head, * ptr2 = head->next;
+            while (ptr2) {
+                ptr1 = ptr2;
+                ptr2 = ptr2->next;
+                delete ptr1;
+            }
+            delete head;
+            head = nullptr;
+        }
+        else {
+            delete head;
+            cout << "список очищен" << endl;
+        }
+    }
+
+    ~list() {
+        (*this).clear();
+    }
+    //добавление элемента в конец
+    void add(int n) {
+        node* ptr = head;
+        if (ptr) {
+            while (ptr->next)
+                ptr = ptr->next;
+            ptr->next = new node;
+            ptr->next->inf = n;
+            ptr->next->next = nullptr;
+        }
+        else {
+            head->inf = n;
+            head->next = nullptr;
+        }
+    }
+    //вывод
+    void print() {
+        node* ptr = head;
+        if (ptr) {
+            while (ptr) {
+                cout << ptr->inf << ' ';
+                ptr = ptr->next;
+            }
+            cout << '\n';
+        }
+        else cout << "No elements\n";
+    }
+    //добавить в начало
+    void Add_begin(int n) {
+        node* ptr1 = head;
+        head = new node;
+        head->inf = n;
+        head->next = ptr1;
+    }
+    //добавить после элементом
+
+    void AddAfter(int find, int num)
+    {
+        node* current = search(find);
+        if (current != 0)
+        {
+            node* t = new (node);
+            t->next = current->next;
+            t->inf = num;
+            current->next = t;
+        }
+    }
+    // добавить перед элемента
+    void AddBefore(int find, int num)
+    {
+        node* current = search(find);
+        if (current != 0)
+        {
+            node* t = new (node);
+            t->next = current->next;
+            t->inf = current->inf;
+            current->next = t;
+            current->inf = num;
+        }
+    }
+    //поиск указателя на элемент
+    node* search(int element)
+    {
+        node* p = head;
+        node* t = head->next;
+        while (t != NULL && p->inf != element)
+        {
+            p = t;
+            t = t->next;
+        }
+        if (t != NULL)
+            return p;
+        else if (p->inf == element)
+            return p;
+        else
+        {
+            cout << "данный элемент отсутствует" << endl;
+            return 0;
+        }
+    }
+    void poisk(int elem)
+    {
+        node* p = head;
+        node* t = head->next;
+        while (t != NULL && p->inf != elem)
+        {
+            p = t;
+            t = t->next;
+        }
+        if (t != NULL)
+            cout << "данный элемент присутствует" << endl;
+        else
+        {
+            if (p->inf == elem)
+                cout << "данный элемент присутствует" << endl;
+            else
+                cout << "данный элемент отсутствует" << endl;
+        }
+    }
+    //удаление элемента после заданного
+    void delite_el_after(node* el)
+    {
+        node* t = el->next;
+        if (t != NULL)
+        {
+            el->next = el->next->next;
+            delete t;
+        }
+    }
+    //счётчик кол-ва элементов между двумя заданными
+    int count(node* nul, node* nul2)
+    {
+        int c = 0;
+        node* t = nul->next;
+        while (t != nul2) {
+            c++;
+            nul = t;
+            t = t->next;
+        }
+        return c;
+    }
+    //удаление элемента
+    void delite_el(node* el)
+    {
+        node* q;
+        q = el->next;
+        if (q != NULL)
+        {
+            el->inf = q->inf;
+            el->next = el->next->next;
+            delete q;
+        }
+        else
+            cout << "Звено с заданным элементом - последнее или отсутствует. Выберите сообветствующую команду\n";
+    }
+    //удаление первого элемента
+    void del_first()
+    {
+        node* p = head;
+        head = p->next;
+        delete p;
+    }
+    //Удаление последнего элемента(не работает)
+    void del_last()
+    {
+        if (empty() != 0) {
+            node* q = head;
+            node* q1 = head->next;
+            while (q1->next)
+            {
+                q = q1;
+                q1 = q1->next;
+            }
+            delete q1;
+            end = q;
+            end->next = nullptr;
+        }
+    }
+    //проверка на пустоту
+    int empty_1()
+    {
+        node* p = head;
+        if (head == nullptr)
+        {
+            cout << "Список пуст\n";
+            return 0;
+        }
+        else
+        {
+            cout << "Список не пуст\n";
+            return 1;
+        }
+    }
+    int empty()
+    {
+        node* p = head;
+        if (p == NULL)
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    //заменить элемент
+    void change(node* el, int new_el)
+    {
+        if (el != head) {
+            node* p = head;
+            node* t = head->next;
+            node* new_element = new node();
+            new_element->inf = new_el;
+            if (p != el)
+                while (t != NULL)
+                {
+                    if (t == el)
+                        break;
+                    p = t;
+                    t = t->next;
+                }
+            new_element->next = el->next;
+            p->next = new_element;
+            delete el;
+        }
+        else
+            head->inf = new_el;
+    }
+    // удалить список
+    void delList()
+    {
+        node* p = head;;
+        node* t=head->next;
+        while (p->next != NULL)
+        {
+            t = p->next;
+            delete p;
+            p = t;
+        }
+        cout << "список уничтожен";
+    }
+};
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    int n, kol, deystvie = 0, el, k, el_add, el_aft, el_bef;
+    node* element;
+    cout << "введите колличество элементов ";
+    cin >> kol;
+    cout << "введите элементы" << endl;
+    cin >> n;
+    list lst(n);
+    /*for (int i = 0; i < kol - 1; i++)
+    {
+        cin >> n;
+        lst.add(n);
+    }*/
+    for (int i = 0; i < kol - 1; i++)
+        lst.add(rand());
+    lst.print();
+    while (deystvie != 8) {
+        cout << "выберите действие" << endl
+            << "1. добавление элемента" << endl
+            << "2. удаление элемента" << endl
+            << "3. заменить элемент" << endl
+            << "4. проверка списка на пустоту" << endl
+            << "5. поиск" << endl
+            << "6. вывести список" << endl
+            << "7. очистить список" << endl
+            << "8. выход" << endl;
+        cin >> deystvie;
+        switch (deystvie)
+        {
+        case 1:
+            cout << "выберите действие" << endl
+                << "1. добавление в начало" << endl
+                << "2. добавить в конец" << endl
+                << "3. добавить перед элеметом" << endl
+                << "4. добавить после элемента" << endl;
+            int add;
+            cin >> add;
+            int c;
+            switch (add)
+            {
+            case 1:
+                if (lst.empty() != 0)
+                {
+                    cout << "введите элемент ";
+                    cin >> c;
+                    lst.Add_begin(c);
+                    break;
+                }
+                else
+                {
+                    cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                    break;
+                }
+            case 2:
+                if (lst.empty() == 0)
+                {
+                    cout << "введите элемент ";
+                    cin >> c;
+                    node* t = new node();
+                    t->inf = c;
+                    lst.head = t;
+                }
+                else
+                {
+                    cout << "введите элемент ";
+                    cin >> c;
+                    lst.add(c);
+                }
+                break;
+            case 3:
+                if (lst.empty() != 0)
+                {
+                    cout << "введите элемент перед которым вставка ";
+                    cin >> el_bef;
+                    cout << "введите элемент который нужно вставить ";
+                    cin >> el_add;
+                    lst.AddBefore(el_bef, el_add);
+                    break;
+                }
+                else
+                {
+                    cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                    break;
+                }
+            case 4:
+                if (lst.empty() != 0)
+                {
+                    cout << "введите элемент после которого вставка ";
+                    cin >> el_aft;
+                    cout << "введите элемент который нужно вставить ";
+                    cin >> el_add;
+                    lst.AddBefore(el_aft, el_add);
+                    break;
+                }
+                else
+                {
+                    cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                    break;
+                }
+            }
+            break;
+        case 2:
+            cout << "выберите действие" << endl
+                << "1. удалить последний элемент" << endl
+                << "2. удалить первый элемент" << endl
+                << "3. удалить элемент после" << endl
+                << "4. удалить элемент" << endl;
+            int del;
+            cin >> del;
+            switch (del)
+            {
+            case 1:
+                if (lst.empty() != 0)
+                {
+                    lst.del_last();
+                    break;
+                }
+                else
+                {
+                    cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                    break;
+                }
+            case 2:
+                if (lst.empty() != 0)
+                {
+                    lst.del_first();
+                    break;
+                }
+                else
+                {
+                    cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                    break;
+                }
+            case 3:
+                if (lst.empty() != 0)
+                {
+                    cout << "введите элемент ";
+                    cin >> el;
+                    element = lst.search(el);
+                    lst.delite_el_after(element);
+                    break;
+                }
+                else
+                {
+                    cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                    break;
+                }
+            case 4:
+                if (lst.empty() != 0)
+                {
+                    cout << "введите элемент ";
+                    cin >> el;
+                    element = lst.search(el);
+                    lst.delite_el(element);
+                    break;
+                }
+                else
+                {
+                    cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                    break;
+                }
+            }
+            break;
+        case 3:
+            if (lst.empty() != 0)
+            {
+                cout << "введите элемент который нужно заменить ";
+                cin >> c;
+                element = lst.search(c);
+                cout << "введите элемент который нужно вставить ";
+                cin >> k;
+                lst.change(element, k);
+            }
+            else
+            {
+                cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+                break;
+            }
+            break;
+        case 4:
+            lst.empty_1();
+            break;
+        case 5:
+            cout << "введите элемент ";
+            cin >> el;
+            lst.poisk(el);
+            break;
+        case 6:
+            if (lst.empty() != 0)
+                lst.print();
+            else
+            {
+                cout << "список пуст. Чтобы добавить элемент выберите добавление в конец" << endl;
+            }
+            break;
+        case 7:
+            lst.clear();
+            break;
+        }
+    }
+    lst.delList();
+    return 0;
+}

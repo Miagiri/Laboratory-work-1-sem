@@ -1,0 +1,43 @@
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+
+using namespace std;
+int zero_d(int* T_D, int n)
+{
+	int j, day;
+	for (j = 0; j < n; j++)
+		if (T_D[j] > 0)
+		{
+			day = j+1;
+			break;
+		}
+	return day;
+}
+int* zero_T(int* T_D, int n)
+{
+	int j, day;
+	day = zero_d(T_D, n);
+	T_D[day-1] += 1;
+	return T_D;
+}
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int n,i;
+	cout << "введите колличество дней в месяце ";
+	cin >> n;
+	int* T_D = new int[n];
+	int* T_D_new = new int[n];
+	for (i = 0; i < n; i++)
+		T_D[i] = rand() % 31 - 15;
+	printf("\n Дата температура \n");
+	for (i = 0; i < n; i++)
+		cout << " " << i + 1 << "      " << T_D[i] << endl;
+	cout << "первый день когда температура поднялась выше нуля "<< zero_d(T_D, n)<<endl;
+	T_D_new = zero_T(T_D, n);
+	printf("\n Дата температура \n");
+	for (i = 0; i < n; i++)
+		cout << " " << i + 1 << "      " << T_D_new[i] << endl;
+	return 0;
+}
